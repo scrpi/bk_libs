@@ -83,7 +83,7 @@ struct bk_vec_hdr {
 #define bk_vec_size(a)              bk_vec__base(a)->size
 #define bk_vec_push(a, v)           (bk_vec__grow_maybe(a, 1), (a)[bk_vec_size(a)++] = (v))
 #define bk_vec_reserve(a, len)      bk_vec__grow_maybe(a, len)
-#define bk_vec_free(a)              do { if (!bk_vec__is_buf(a)) free(bk_vec__base(a)); } while (0)
+#define bk_vec_free(a)              do { if ((a) && !bk_vec__is_buf(a)) free(bk_vec__base(a)); } while (0)
 #define bk_vec_use_buf(a, buf, len) ((a) = _bk_vec_use_buf((buf), (len), sizeof(*(a))))
 #define bk_vec_size_for(a, len)     ((sizeof(*(a)) * (len)) + sizeof(struct bk_vec_hdr))
 #define bk_vec_pop(a, num)          do { bk_vec_size(a) = bk_vec_size(a) > (num) ? bk_vec_size(a) - (num) : 0; } while (0)
