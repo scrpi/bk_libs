@@ -124,7 +124,10 @@ static inline void *_bk_vec_grow_func(void *a, size_t len, size_t elem_size)
 		new_cap = bk_vec_size(a);
 	}
 
-	hdr = realloc(hdr, sizeof(*hdr) + elem_size * new_cap);
+	struct bk_vec_hdr *new_hdr = realloc(hdr, sizeof(*hdr) + elem_size * new_cap);
+	if (!new_hdr)
+		return a;  /* Return original vector unchanged on allocation failure */
+	hdr = new_hdr;
 	hdr->capacity = new_cap;
 
 	if (!a) {
